@@ -6,18 +6,28 @@ const closeAuth = document.querySelector('.close-auth');
 const logInForm = document.getElementById('logInForm');
 const inputLogin = document.getElementById('login');
 const inputPassword = document.getElementById('password');
+let buttonLogin = document.querySelector('.button-login');
 
 
 const login = (user) => {
-
     
-    buttonAuth.style.display = 'none'
+    buttonLogin.addEventListener('click', () => {
+        if(inputLogin.value == '') {
+            alert('Введите логин')
+            
+        }else{
+            buttonAuth.style.display = 'none'
     
-    buttonOut.style.display = 'flex'
-    userName.style.display = 'flex'
+            buttonOut.style.display = 'flex'
+            userName.style.display = 'flex'
+        
+            userName.textContent = user.login;
+            modalAuth.style.display = 'none';
+        }
+    })
+    
+   
 
-    userName.textContent = user.login;
-    modalAuth.style.display = 'none';
 }
 
 const logout = () => {
@@ -50,6 +60,7 @@ logInForm.addEventListener('submit', (event) => {
         login: inputLogin.value,
         password: inputPassword.value,
     }
+
 
     localStorage.setItem('user', JSON.stringify(user))
     login(user)
