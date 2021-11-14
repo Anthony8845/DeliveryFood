@@ -12,22 +12,21 @@ const auth = () => {
 
     const login = (user) => {
         
-        buttonLogin.addEventListener('click', () => {
-            if(inputLogin.value == '') {
-                alert('Введите логин')
+        // buttonLogin.addEventListener('click', () => {
+        //     if(inputLogin.value == '') {
+        //         alert('Введите логин')
                 
-            }else{
-                buttonAuth.style.display = 'none'
-                buttonCart.style.display = 'flex'
-                buttonOut.style.display = 'flex'
-                userName.style.display = 'flex'
-            
-                userName.textContent = user.login;
-                modalAuth.style.display = 'none';
-            }
-        })
+        //     }
+           
+        // })
         
+        buttonAuth.style.display = 'none'
+        buttonCart.style.display = 'flex'
+        buttonOut.style.display = 'flex'
+        userName.style.display = 'flex'
     
+        userName.textContent = user.login;
+        modalAuth.style.display = 'none';
 
     }
 
@@ -39,7 +38,7 @@ const auth = () => {
 
         userName.textContent = '';
 
-        // localStorage.removeItem('user')
+        localStorage.removeItem('user')
     }
 
     buttonOut.addEventListener('click', () => {
@@ -54,8 +53,8 @@ const auth = () => {
             modalAuth.style.display = 'none';
         })
 
-    logInForm.addEventListener('submit', (event) => {
-        event.preventDefault()
+    logInForm.addEventListener('submit', (e) => {
+        e.preventDefault()
         
         const user = {
             login: inputLogin.value,
