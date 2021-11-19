@@ -1,57 +1,77 @@
 const cart = () => {
-    const buttonCart = document.getElementById('cart-button')
-    const modalCart = document.querySelector('.modal-cart')
-    const close = modalCart.querySelector('.close')
-    const body = modalCart.querySelector('.modal-body')
-    const buttonSend = modalCart.querySelector('.button-primary')
+  const buttonCart = document.getElementById('cart-button')
+  const modalCart = document.querySelector('.modal-cart')
+  const close = modalCart.querySelector('.close')
+  const body = modalCart.querySelector('.modal-body')
+  const buttonSend = modalCart.querySelector('.button-primary')
 
-    const resetCart = () => {
-        body.innerHTML = ''
-        localStorage.removeItem('cart')
-        modalCart.classList.remove('is-open')
-    }
+  
 
-    const incrementCount = (id) => {
-        const cartArray = JSON.parse(localStorage.getItem('cart'))
-        console.log(id)
+  
+ const f = () => { 
+  const array = JSON.parse(localStorage.getItem('cart'))
+  // console.log(array)
 
-        cartArray.map((item) => {
-            if (item.id === id) {
-                item.count++
-            }
+  
+  array.forEach((array) => {
+    let priceTag = document.querySelector('.modal-pricetag')
+    let a = `${array.price}`
+    a += `${array.price}`
 
-            return item
-        })
 
-        localStorage.setItem('cart', JSON.stringify(cartArray))
-        renderItems(cartArray)
-    }
+    priceTag.innerHTML = a
+    // console.log(`${array.price * array.count}`) 
+  })
+}
 
-    const decrementCount = (id) => {
-        const cartArray = JSON.parse(localStorage.getItem('cart'))
-        
 
-        cartArray.map((item) => {
-            if (item.id === id) {
-                item.count = item.count > 0 ? item.count - 1 : 0
-            }
-           
-            return item
-        })
+  const resetCart = () => {
+    body.innerHTML = ''
+    localStorage.removeItem('cart')
+    modalCart.classList.remove('is-open')
+  }
 
-        localStorage.setItem('cart', JSON.stringify(cartArray))
-        renderItems(cartArray)
-    }
+  const incrementCount = (id) => {
+    const cartArray = JSON.parse(localStorage.getItem('cart'))
+    
 
-    const renderItems = (data) => {
-        body.innerHTML = ''
-        data.forEach(({name, price, id, count}) => {
-       
-            const cartElem = document.createElement('div')
+    cartArray.map((item) => {
+      if (item.id === id) {
+        item.count++
+      }
 
-            cartElem.classList.add('food-row')
+      return item
+    })
 
-            cartElem.innerHTML = `
+    localStorage.setItem('cart', JSON.stringify(cartArray))
+    renderItems(cartArray)
+  }
+
+  const decrementCount = (id) => {
+    const cartArray = JSON.parse(localStorage.getItem('cart'))
+
+
+    cartArray.map((item) => {
+      if (item.id === id) {
+        item.count = item.count > 0 ? item.count - 1 : 0
+      }
+
+      return item
+    })
+
+    localStorage.setItem('cart', JSON.stringify(cartArray))
+    renderItems(cartArray)
+  }
+
+  const renderItems = (data) => {
+    body.innerHTML = ''
+    data.forEach(({ name, price, id, count }) => {
+      
+      const cartElem = document.createElement('div')
+
+      cartElem.classList.add('food-row')
+
+     cartElem.innerHTML = `
                 <span class="food-name">${name}</span>
                 <strong class="food-price">${price} ₽</strong>
                 <div class="food-counter">
@@ -60,58 +80,72 @@ const cart = () => {
                     <button class="counter-button btn-inc" data-index = "${id}">+</button>
                 </div>
             `
+      
+      f()
 
-        
-            body.append(cartElem)
-            
+      body.append(cartElem)
 
-        })
+      
+     
+
+     
+    })
+  }
+
+  body.addEventListener('click', (e) => {
+    e.preventDefault()
+
+    if (e.target.classList.contains('btn-inc')) {
+      incrementCount(e.target.dataset.index)
+    } else if (e.target.classList.contains('btn-dec')) {
+      decrementCount(e.target.dataset.index)
     }
+  })
 
-    body/addEventListener('click', (e) => {
-        e.preventDefault()
+  buttonSend.addEventListener('click', () => {
+    const cartArray = localStorage.getItem('cart')
 
-        if (e.target.classList.contains('btn-inc')) {
-            incrementCount(e.target.dataset.index)
-        } else if (e.target.classList.contains('btn-dec')) {
-            decrementCount(e.target.dataset.index)
+    fetch('https://jsonplaceholder.typicode.com/posts', {
+      method: 'POST',
+      body: cartArray
+    })
+
+      .then(response => {
+        if (response.ok) {
+          resetCart()
         }
-    })
+      })
+      .catch(e => {
+        console.error(e)
+      })
+
+  })
+
+  buttonCart.addEventListener('click', () => {
+   
+    if (localStorage.getItem('cart')) {
+      renderItems(JSON.parse(localStorage.getItem('cart')))
+    }
     
-    buttonSend.addEventListener('click', () => {
-        const cartArray = localStorage.getItem('cart')
+    modalCart.classList.add('is-open')
+  })
 
-        fetch('https://jsonplaceholder.typicode.com/posts', {
-            method: 'POST',
-            body: cartArray
-        })
+  close.addEventListener('click', () => {
 
-        .then(response => {
-            if (response.ok) {
-                resetCart()
-            }
-        })
-        .catch(e => {
-            console.error(e)
-        })
+    modalCart.classList.remove('is-open')
+  })
 
-    })
 
-    buttonCart.addEventListener('click', () => {
-        if (localStorage.getItem('cart')) {
-            renderItems(JSON.parse(localStorage.getItem('cart')))
-        }
-
-        modalCart.classList.add('is-open')
-    })
-
-    close.addEventListener('click', () => {
-        
-        modalCart.classList.remove('is-open')
-    })
-
-    
 
 }
+
+
+
+
+
+
+
+
+
 
 cart()
