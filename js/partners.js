@@ -9,7 +9,7 @@ const partners = () => {
     data.forEach((item) => {
       const { image, kitchen, name, price, products, stars, time_of_delivery } = item
       const a = document.createElement('a')
-      a.setAttribute('href', '/restaurant.html')
+      a.setAttribute('href', 'restaurant.html')
       a.classList.add('card')
       a.classList.add('card-restaurant')
 
@@ -41,7 +41,7 @@ const partners = () => {
 
         localStorage.setItem('restaurant', JSON.stringify(item))
 
-        window.location.href = '/restaurant.html'
+        window.location.href = 'restaurant.html'
       })
       cardsRestaurants.append(a)
     });
